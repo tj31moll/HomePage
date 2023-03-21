@@ -3,10 +3,37 @@ from sort_drive import sort_drive_files
 import pandas as pd
 import sqlite3
 from sqlalchemy import create_engine
+import requests
+import json
+from requests.structures import CaseInsensitiveDict
+import nltk
+from nltk.corpus import stopwords
+from nltk.stem.wordnet import WordNetLemmatizer
+from nltk import word_tokenize
+import string
+from gensim import corpora
+from gensim.models.ldamodel import LdaModel
+
 
 app = Flask(__name__)
 
 # Your existing code for the homepage, Google Calendar, and OneNote integration
+
+@app.route('/process_text', methods=['GET', 'POST'])
+def process_text():
+    result = None
+    if request.method == 'POST':
+        access_token = request.form.get('access_token')
+        section_id = request.form.get('section_id')
+        text = request.form.get('text')
+
+        if access_token and section_id and text:
+            sorted_data = sort_text(text, num_topics=3)
+            create_page(access_token, section_id, sorted_data)
+            result = "Successfully sorted text and created a new page in OneNote."
+
+    return render_template('process_text.html', result=result)
+
 
 @app.route('/subpage', methods=['GET', 'POST'])
 def subpage():
