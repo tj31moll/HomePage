@@ -1,1 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Subpage</title>
+    <link rel="stylesheet" href="/static/styles.css">
+</head>
+<body>
+    <h1>Subpage</h1>
+    <a href="/">Go back to the homepage</a>
 
+    <form action="/subpage" method="POST">
+        <input type="submit" value="Run Python Script">
+    </form>
+
+    {% if result %}
+    <div>
+        <h2>Result:</h2>
+        <pre>{{ result }}</pre>
+    </div>
+    {% endif %}
+</body>
+</html>
