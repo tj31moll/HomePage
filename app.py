@@ -33,8 +33,9 @@ def upload():
         data = pd.read_csv(csvfile)
         engine = create_engine(f'sqlite:///{database_name}')
         data.to_sql(table_name, engine, if_exists='replace', index=False)
+        return render_template('csv_to_sql.html')
 
-    return render_template('csv_to_sql.html')
+    return redirect(url_for('index'))
 
 @app.route('/view_data', methods=['GET'])
 def view_data():
@@ -49,7 +50,7 @@ def view_data():
     return redirect(url_for('index'))
 
 # Add the following line to your main() function
-app.run(host='0.0.0.0', port=3666)
 
 if __name__ == '__main__':
-    main()
+    app.run(host='0.0.0.0', port=3666, debug=True)
+
