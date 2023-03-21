@@ -20,9 +20,30 @@ def subpage():
 
     return render_template('subpage.html', result=result)
 
-@app.route('/csv_to_sql', methods=['GET', 'POST'])
-def csv_to_sql():
-    # Your existing code for uploading CSV and converting it to SQL
+@app.route('/upload', methods=['POST'])
+def upload():
+    csvfile = request.files.get('csvfile')
+    database_name = request.form.get('database_name')
+    table_name = request.form.get('table_name')
+
+    if csvfile and database_name and table_name:
+        data = pd.read_csv(csvfile)
+        engine = create_engine(f'sqlite:///{database_name}')
+        data.to_sql(table_name, engine, if_exists='replace', index=False)
+
+    return redirect(url_for('index'))
+
+@app.route('/view_data', methods=['GET'])
+def view_data():
+    database_name = request.args.get('database_name')
+    table_name = request.args.get('table_name')
+
+    if database_name and table_name:
+        engine = create_engine(f'sqlite:///{database_name}')
+        data = pd.read_sql_table(table_name, engine)
+        return render_template('view_data.html', data=data.to_html(), table_name=table_name, database_name=database_name)
+
+    return redirect(url_for('index'))
 
 # Add the following line to your main() function
 app.run(host='0.0.0.0', port=3666)
