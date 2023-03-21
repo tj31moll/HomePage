@@ -34,7 +34,7 @@ def upload():
         engine = create_engine(f'sqlite:///{database_name}')
         data.to_sql(table_name, engine, if_exists='replace', index=False)
 
-    return redirect(url_for('index'))
+    return render_template('csv_to_sql.html')
 
 @app.route('/view_data', methods=['GET'])
 def view_data():
