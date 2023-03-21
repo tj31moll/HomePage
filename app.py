@@ -100,6 +100,10 @@ def sort_text(text, num_topics=3):
 
     return formatted_data
 
+def process_and_create_onenote_page(access_token, section_id, text):
+    sorted_data = sort_text(text, num_topics=3)
+    create_page(access_token, section_id, sorted_data)
+
 
 @app.route('/process_text', methods=['GET', 'POST'])
 def process_text():
@@ -110,15 +114,10 @@ def process_text():
         text = request.form.get('text')
 
         if access_token and section_id and text:
-            sorted_data = sort_text(text, num_topics=3)
-            create_page(access_token, section_id, sorted_data)
+            process_and_create_onenote_page(access_token, section_id, text)
             result = "Successfully sorted text and created a new page in OneNote."
 
     return render_template('process_text.html', result=result)
-
-
-
-
 
 
 
