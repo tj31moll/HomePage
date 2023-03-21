@@ -10,4 +10,35 @@
     <div>{{ data|safe }}</div>
     <a href="/">Go back to the homepage</a>
 </body>
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CSV to SQL</title>
+</head>
+<body>
+    <h1>Upload CSV and Convert to SQL</h1>
+    <form action="/upload" method="POST" enctype="multipart/form-data">
+        <label for="csvfile">CSV File:</label>
+        <input type="file" name="csvfile" required>
+        <br>
+        <label for="database_name">Database Name:</label>
+        <input type="text" name="database_name" required>
+        <br>
+        <label for="table_name">Table Name:</label>
+        <input type="text" name="table_name" required>
+        <br>
+        <input type="submit" value="Upload and Convert">
+    </form>
+    <h2>View Database Content</h2>
+    <form action="/view_data" method="GET">
+        <label for="database_name">Database Name:</label>
+        <input type="text" name="database_name" required>
+        <br>
+        <label for="table_name">Table Name:</label>
+        <input type="text" name="table_name" required>
+        <br>
+        <input type="submit" value="View Data">
+    </form>
+</body>
 </html>
