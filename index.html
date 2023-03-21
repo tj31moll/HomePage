@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Homepage</title>
+    <link rel="stylesheet" href="styles.css">
+    <script defer src="https://apis.google.com/js/api.js"></script>
+    <script defer src="https://appsforoffice.microsoft.com/lib/1/hosted/office.js"></script>
+    <script defer src="script.js"></script>
+</head>
+<body>
+    <h1>My Homepage</h1>
+    <div id="bookmarks">
+        <h2>Bookmarks</h2>
+        <!-- Add your bookmarks here -->
+        <a href="https://www.example.com">Example</a>
+    </div>
+    <div id="calendar">
+        <h2>Google Calendar</h2>
+        <button id="authorize_button" style="display: none;">Authorize Google Calendar</button>
+        <button id="signout_button" style="display: none;">Sign Out</button>
+        <div id="calendar_content" style="display: none;"></div>
+    </div>
+    <div id="onenote">
+        <h2>OneNote</h2>
+        <button id="onenote_button">Authorize OneNote</button>
+        <div id="onenote_content" style="display: none;"></div>
+    </div>
+</body>
+</html>
