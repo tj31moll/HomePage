@@ -211,6 +211,17 @@ def view_data():
 
     return redirect(url_for('index'))
 
+@app.route('/sort_urls', methods=['GET', 'POST'])
+def sort_urls():
+    result = None
+    if request.method == 'POST':
+        text = request.form.get('text')
+
+        if text:
+            result = sort_websites(text)
+
+    return render_template('sort_urls.html', result=result)
+
 # Add the following line to your main() function
 
 if __name__ == '__main__':
