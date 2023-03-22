@@ -156,6 +156,9 @@ def process_and_create_onenote_page(access_token, section_id, text):
 def index():
     return render_template('index.html')
 
+@app.route('/csv_to_sql', methods=['GET'])
+def csv_to_sql():
+    return render_template('csv_to_sql.html')
     
 @app.route('/process_text', methods=['GET', 'POST'])
 def process_text():
