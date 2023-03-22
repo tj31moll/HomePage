@@ -156,10 +156,6 @@ def process_and_create_onenote_page(access_token, section_id, text):
 def index():
     return render_template('index.html')
 
-@app.route('/')
-def index():
-    return render_template('index.html')
-
     
 @app.route('/process_text', methods=['GET', 'POST'])
 def process_text():
