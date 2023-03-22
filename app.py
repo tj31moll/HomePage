@@ -1,5 +1,4 @@
 from flask import Flask, render_template, request, redirect, url_for
-from sort_drive import sort_drive_files
 import pandas as pd
 import sqlite3
 from sqlalchemy import create_engine
@@ -153,6 +152,9 @@ def process_and_create_onenote_page(access_token, section_id, text):
     sorted_data = sort_text(text, num_topics=3)
     create_page(access_token, section_id, sorted_data)
 
+@app.route('/')
+def index():
+    return render_template('index.html')
 
 @app.route('/process_text', methods=['GET', 'POST'])
 def process_text():
