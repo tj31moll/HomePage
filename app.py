@@ -13,12 +13,61 @@ from nltk import word_tokenize
 import string
 from gensim import corpora
 from gensim.models.ldamodel import LdaModel
+import re
+from urllib.parse import urlparse
+import tldextract
 
 
 app = Flask(__name__)
 
 # Your existing code for the homepage, Google Calendar, and OneNote integration
 # OneNote API functions
+def preprocess_domain(domain):
+    stop = set(stopwords.words('english'))
+    exclude = set(string.punctuation)
+    lemma = WordNetLemmatizer()
+
+    domain_parts = domain.lower().split(".")
+    stop_free = " ".join([i for i in domain_parts if i not in stop])
+    punc_free = "".join(ch for ch in stop_free if ch not in exclude)
+    normalized = " ".join(lemma.lemmatize(word) for word in punc_free.split())
+
+    return normalized
+
+def sort_websites(text, num_categories=3):
+    urls = re.findall(r'http[s]?://(?:[a-zA-Z]|[0-9]|[$-_@.&+]|[!*\\(\\),]|(?:%[0-9a-fA-F][0-9a-fA-F]))+', text)
+    domains = [tldextract.extract(url).domain for url in urls]
+
+    preprocessed_domains = [preprocess_domain(domain) for domain in domains]
+
+    # Tokenize the preprocessed domains
+    tokens = [word_tokenize(domain) for domain in preprocessed_domains]
+
+    # Create a dictionary and corpus for LDA
+    dictionary = corpora.Dictionary(tokens)
+    corpus = [dictionary.doc2bow(token) for token in tokens]
+
+    # Train the LDA model
+    lda_model = LdaModel(corpus, num_topics=num_categories, id2word=dictionary, passes=50)
+
+    # Sort the domains into categories
+    sorted_data = {f"Category {i}": [] for i in range(1, num_categories + 1)}
+
+    for doc in corpus:
+        topic_distribution = lda_model.get_document_topics(doc)
+        most_likely_topic = max(topic_distribution, key=lambda x: x[1])[0]
+        sorted_data[f"Category {most_likely_topic + 1}"].append(urls[corpus.index(doc)])
+
+    formatted_data = ""
+    for category, items in sorted_data.items():
+        formatted_data += f"<h3>{category}</h3><ul>"
+        for item in items:
+            formatted_data += f"<li><a href='{item}' target='_blank'>{item}</a></li>"
+        formatted_data += "</ul>"
+
+    return formatted_data
+
+
 def create_page(access_token, section_id, content):
     headers = CaseInsensitiveDict()
     headers["Content-Type"] = "application/json"
