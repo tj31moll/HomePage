@@ -156,6 +156,17 @@ def process_and_create_onenote_page(access_token, section_id, text):
 def index():
     return render_template('index.html')
 
+@app.route('/onenote_callback')
+def onenote_callback():
+    # Handle the redirect from Microsoft OAuth2 authorization process
+    code = request.args.get('code')
+    state = request.args.get('state')
+    
+    # Exchange the 'code' for an access token
+    # Add your code here to make a POST request to Microsoft's token endpoint
+    
+    return redirect(url_for('index'))
+
 @app.route('/csv_to_sql', methods=['GET'])
 def csv_to_sql():
     return render_template('csv_to_sql.html')
