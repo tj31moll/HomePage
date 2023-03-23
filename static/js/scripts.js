@@ -1,9 +1,9 @@
 
 // Replace with your own API keys and credentials
-const GOOGLE_API_KEY = 'YOUR_GOOGLE_API_KEY';
-const GOOGLE_CLIENT_ID = 'YOUR_GOOGLE_CLIENT_ID';
-const MICROSOFT_APP_ID = 'YOUR_MICROSOFT_APP_ID';
-const MICROSOFT_APP_SECRET = 'YOUR_MICROSOFT_APP_SECRET';
+const GOOGLE_API_KEY = 'AIz';
+const GOOGLE_CLIENT_ID = '8879ent.com';
+const MICROSOFT_APP_ID = 'cdfc16';
+const MICROSOFT_APP_SECRET = 'a2dT';
 
 // Google Calendar integration
 function handleClientLoad() {
@@ -29,19 +29,21 @@ function updateSigninStatus(isSignedIn) {
     const signoutButton = document.getElementById('signout_button');
     const calendarContent = document.getElementById('calendar_content');
 
-    if (isSignedIn) {
-        authorizeButton.style.display = 'none';
-        signoutButton.style.display = 'block';
-        calendarContent.style.display = 'block';
-        listUpcomingEvents();
-    } else {
-        authorizeButton.style.display = 'block';
-        signoutButton.style.display = 'none';
-        calendarContent.style.display = 'none';
-    }
+    if (calendarContent) {
+        if (isSignedIn) {
+            authorizeButton.style.display = 'none';
+            signoutButton.style.display = 'block';
+            calendarContent.style.display = 'block';
+            listUpcomingEvents();
+        } else {
+            authorizeButton.style.display = 'block';
+            signoutButton.style.display = 'none';
+            calendarContent.style.display = 'none';
+        }
 
-    authorizeButton.onclick = handleAuthClick;
-    signoutButton.onclick = handleSignoutClick;
+        authorizeButton.onclick = handleAuthClick;
+        signoutButton.onclick = handleSignoutClick;
+    }
 }
 
 function handleAuthClick() {
@@ -79,9 +81,17 @@ function listUpcomingEvents() {
 }
 
 // OneNote integration
-document.getElementById('onenote_button').addEventListener('click', () => {
-    // Add your OneNote authorization and API calls here
-});
+function authorizeOneNote() {
+    const msftAuthUrl = `https://login.microsoftonline.com/common/oauth2/v2.0/authorize?client_id=${MICROSOFT_APP_ID}&response_type=code&redirect_uri=${encodeURIComponent('<YOUR_REDIRECT_URI>')}&response_mode=query&scope=offline_access%20User.Read%20Notes.ReadWrite.All&state=<YOUR_STATE_VALUE>`;
+    window.location.href = msftAuthUrl;
+}
+
+//document.getElementById('onenote_button').addEventListener('click', authorizeOneNote);
+const oneNoteButton = document.getElementById('onenote_button');
+if (oneNoteButton) {
+    oneNoteButton.addEventListener('click', authorizeOneNote);
+}
+
 
 // Load the Google Calendar API client
 document.addEventListener('DOMContentLoaded', handleClientLoad);
